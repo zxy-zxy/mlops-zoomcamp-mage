@@ -20,23 +20,18 @@ def export_data(*args, **kwargs):
         Optionally return any object and it'll be logged and
         displayed when inspecting the block run.
     """
-    # Specify your data exporting logic here
+
     lr, dv = args[0]
     
     mlflow.set_tracking_uri("http://mlflow:5000")
     
-    # Start an MLflow run
     with mlflow.start_run():
-        # Log the model
         mlflow.sklearn.log_model(lr, "linear_regression_model")
         
-        # Save the DictVectorizer artifact
         dv_path = "dict_vectorizer.pkl"
         with open(dv_path, "wb") as f:
             pickle.dump(dv, f)
         
-        # Log the artifact
         mlflow.log_artifact(dv_path, artifact_path="dict_vectorizer")
 
-        # Clean up the local artifact file
         os.remove(dv_path)
